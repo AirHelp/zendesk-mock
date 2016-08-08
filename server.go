@@ -12,7 +12,7 @@ import (
 func main() {
 	m := martini.Classic()
 	m.Post("/api/v2/tickets.json", tickets.New)
-	m.Get("/api/v2/tickets.json", tickets.Find)
+	m.Get("/api/v2/tickets/:id.json", tickets.Find)
 	m.Get("/api/v2/users.json", users.Find)
 	port := ":8080"
 	if len(os.Args) > 1 {
