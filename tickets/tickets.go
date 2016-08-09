@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/AirHelp/zendesk-mock/utils"
 	"github.com/go-martini/martini"
 )
 
 type response struct {
 	Ticket ticket `json:"ticket"`
 }
+
 type ticket struct {
 	Id      int    `json:"id"`
 	Subject string `json:"subject"`
@@ -18,7 +18,12 @@ type ticket struct {
 
 // New creates new ticket
 func New(params martini.Params) (int, string) {
-	return utils.NotImplemented()
+	response := response{ticket{12312, "Anything from Zendesk"}}
+	bytes, err := json.Marshal(response)
+	if err != nil {
+		return 500, err.Error()
+	}
+	return 201, string(bytes)
 }
 
 // Find finds ticket
