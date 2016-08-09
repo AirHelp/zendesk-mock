@@ -14,11 +14,13 @@ type response struct {
 type ticket struct {
 	Id      int    `json:"id"`
 	Subject string `json:"subject"`
+	Comment string `json:"comment"`
 }
 
 // New creates new ticket
 func New(params martini.Params) (int, string) {
-	response := response{ticket{12312, "Anything from Zendesk"}}
+	comment := (params["comment"])
+	response := response{ticket{12312, "Anything from Zendesk", comment}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
 		return 500, err.Error()
@@ -32,7 +34,7 @@ func Find(params martini.Params) (int, string) {
 	if err != nil {
 		return 404, err.Error()
 	}
-	response := response{ticket{id, "Anything from Zendesk"}}
+	response := response{ticket{id, "Anything from Zendesk", ""}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
 		return 500, err.Error()
