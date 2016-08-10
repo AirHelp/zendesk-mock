@@ -2,9 +2,16 @@ package tickets
 
 import (
 	"encoding/json"
+	"math/rand"
+	"net/http"
 	"strconv"
 
 	"github.com/go-martini/martini"
+)
+
+const (
+	min = 1000
+	max = 10000
 )
 
 type response struct {
@@ -12,20 +19,42 @@ type response struct {
 }
 
 type ticket struct {
-	Id      int    `json:"id"`
+	ID      int    `json:"id"`
 	Subject string `json:"subject"`
 	Comment string `json:"comment"`
 }
 
-// New creates new ticket
-func New(params martini.Params) (int, string) {
-	comment := (params["comment"])
-	response := response{ticket{12312, "Anything from Zendesk", comment}}
+type reqBody struct {
+	Ticket reqTicket `json:"ticket"`
+}
+type reqTicket struct {
+	Subject string     `json:"subject"`
+	Comment reqComment `json:"comment"`
+}
+type reqComment struct {
+	Body string `json:"body"`
+}
+
+func New(res http.ResponseWriter, req *http.Request) {
+	dec := json.NewDecoder(req.Body)
+	var input reqBody
+	if err := dec.Decode(&input); err != nil {
+		res.WriteHeader(400)
+		return
+	}
+	if input.Ticket.Subject == "" {
+		res.WriteHeader(400)
+		return
+	}
+	response := response{ticket{ID: min + rand.Intn(max), Subject: input.Ticket.Subject, Comment: input.Ticket.Comment.Body}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
-		return 500, err.Error()
+		res.WriteHeader(500)
+		return
 	}
-	return 201, string(bytes)
+	res.WriteHeader(201)
+	res.Write(bytes)
+
 }
 
 // Find finds ticket

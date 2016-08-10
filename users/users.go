@@ -20,7 +20,7 @@ type user struct {
 func Find(params martini.Params) (int, string) {
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		return 404, err.Error()
+		return 400, err.Error()
 	}
 	response := response{user{id, "Name from Zendesk"}}
 	bytes, err := json.Marshal(response)
