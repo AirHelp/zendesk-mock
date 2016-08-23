@@ -1,0 +1,19 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "fcfxNsCuheCrubAAl6zWgimCnLY=",
+			"path": "github.com/codegangsta/inject",
+			"revision": "33e0aa1cb7c019ccc3fbe049a8262a6403d30504",
+			"revisionTime": "2015-01-14T23:56:00Z"
+		},
+		{
+			"checksumSHA1": "yQqYQc9nHrkGNNEdQ0bcwb1qe3o=",
+			"path": "github.com/go-martini/martini",
+			"revision": "c257c412d547ac70fcaf5596c1a50a7cb832c1fc",
+			"revisionTime": "2016-06-18T11:20:59Z"
+		}
+	],
+	"rootPath": "github.com/AirHelp/zendesk-mock"
+}
