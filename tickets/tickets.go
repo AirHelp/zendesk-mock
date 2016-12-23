@@ -54,6 +54,7 @@ func New(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(500)
 		return
 	}
+	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	res.WriteHeader(201)
 	res.Write(bytes)
 
