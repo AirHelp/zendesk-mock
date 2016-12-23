@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"log"
 	"strconv"
 
 	"github.com/go-martini/martini"
@@ -20,11 +21,13 @@ type user struct {
 func Find(params martini.Params) (int, string) {
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
+		log.Print(err)
 		return 400, err.Error()
 	}
 	response := response{user{id, "Name from Zendesk"}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
+		log.Print(err)
 		return 500, err.Error()
 	}
 	return 200, string(bytes)
