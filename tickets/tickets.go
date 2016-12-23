@@ -2,6 +2,7 @@ package tickets
 
 import (
 	"encoding/json"
+	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -39,16 +40,17 @@ func New(res http.ResponseWriter, req *http.Request) {
 	dec := json.NewDecoder(req.Body)
 	var input reqBody
 	if err := dec.Decode(&input); err != nil {
+		log.Print(err)
 		res.WriteHeader(400)
 		return
 	}
 	if input.Ticket.Subject == "" {
-		res.WriteHeader(400)
-		return
+		log.Println("Missing ticket.subject")
 	}
 	response := response{ticket{ID: min + rand.Intn(max), Subject: input.Ticket.Subject, Comment: input.Ticket.Comment.Body}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
+		log.Print(err)
 		res.WriteHeader(500)
 		return
 	}
@@ -61,11 +63,13 @@ func New(res http.ResponseWriter, req *http.Request) {
 func Find(params martini.Params) (int, string) {
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
+		log.Print(err)
 		return 404, err.Error()
 	}
 	response := response{ticket{id, "Anything from Zendesk", ""}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
+		log.Print(err)
 		return 500, err.Error()
 	}
 	return 200, string(bytes)
