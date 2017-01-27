@@ -4,7 +4,7 @@
 git clone ...
 or
 go get github.com/Airhelp/zendesk-mock (requires go installed and GOPATH exported)
-cd zendesk-mock
+cd $GOPATH/src/github.com/AirHelp/zendesk-mock
 ```
 
 ## Build
