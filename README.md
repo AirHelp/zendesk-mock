@@ -9,8 +9,7 @@ cd $GOPATH/src/github.com/AirHelp/zendesk-mock
 
 ## Build
 ```bash
-env GOOS=linux GOARCH=386 go build
-docker build -t airhelp/zendesk-mock .
+make release
 ```
 
 ## Run locally on docker
@@ -20,5 +19,5 @@ docker run -p 8080:8080 airhelp/zendesk-mock
 
 ## Push to docker hub
 ```bash
-docker push airhelp/zendesk-mock
+make push
 ```
