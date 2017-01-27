@@ -3,9 +3,9 @@ package users
 import (
 	"encoding/json"
 	"log"
+	"net/http"
 	"strconv"
-
-	"github.com/go-martini/martini"
+	"strings"
 )
 
 type response struct {
@@ -18,17 +18,21 @@ type user struct {
 }
 
 // Find finds users
-func Find(params martini.Params) (int, string) {
-	id, err := strconv.Atoi(params["id"])
+func Find(res http.ResponseWriter, req *http.Request) {
+	id, err := strconv.Atoi(strings.Replace(req.URL.RequestURI(), "/api/v2/users/", "", 1))
 	if err != nil {
 		log.Print(err)
-		return 400, err.Error()
+		res.WriteHeader(400)
+		return
 	}
-	response := response{user{id, "Name from Zendesk"}}
-	bytes, err := json.Marshal(response)
+	user := response{user{id, "Name from Zendesk"}}
+	bytes, err := json.Marshal(user)
 	if err != nil {
 		log.Print(err)
-		return 500, err.Error()
+		res.WriteHeader(500)
+		return
 	}
-	return 200, string(bytes)
+	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	res.WriteHeader(200)
+	res.Write(bytes)
 }

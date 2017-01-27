@@ -1,4 +1,4 @@
-## Installation
+## Download
 
 ```bash
 git clone ...
@@ -7,8 +7,18 @@ go get github.com/Airhelp/zendesk-mock (requires go installed and GOPATH exporte
 cd zendesk-mock
 ```
 
-## Run
+## Build
 ```bash
-cd zendesk-mock
-go run server.go [port]
+env GOOS=linux GOARCH=386 go build
+docker build -t airhelp/zendesk-mock .
+```
+
+## Run locally on docker
+```bash
+docker run -p 8080:8080 airhelp/zendesk-mock
+```
+
+## Push to docker hub
+```bash
+docker push airhelp/zendesk-mock
 ```
