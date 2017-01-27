@@ -3,9 +3,11 @@ package tickets
 import (
 	"encoding/json"
 	"log"
-	"math/rand"
 	"net/http"
 	"strconv"
+
+	"github.com/go-martini/martini"
+	"time"
 	"strings"
 )
 
@@ -48,7 +50,8 @@ func New(res http.ResponseWriter, req *http.Request) {
 	if input.Ticket.Subject == "" {
 		log.Println("Missing ticket.subject")
 	}
-	response := response{ticket{ID: min + rand.Intn(max), Subject: input.Ticket.Subject, Comment: input.Ticket.Comment.Body}}
+	timestampId := int(time.Now().Unix())
+	response := response{ticket{ID: timestampId, Subject: input.Ticket.Subject, Comment: input.Ticket.Comment.Body}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
 		log.Print(err)
