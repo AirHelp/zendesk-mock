@@ -5,14 +5,13 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-
-	"github.com/go-martini/martini"
 	"time"
+	"strings"
 )
 
 const (
-	min = 1000
-	max = 10000
+	// TicketsFindURI uri path without param
+	TicketsFindURI = "/api/v2/tickets/"
 )
 
 type response struct {
@@ -62,17 +61,21 @@ func New(res http.ResponseWriter, req *http.Request) {
 }
 
 // Find finds ticket
-func Find(params martini.Params) (int, string) {
-	id, err := strconv.Atoi(params["id"])
+func Find(res http.ResponseWriter, req *http.Request) {
+	id, err := strconv.Atoi(strings.Replace(req.URL.RequestURI(), TicketsFindURI, "", 1))
 	if err != nil {
 		log.Print(err)
-		return 404, err.Error()
+		res.WriteHeader(404)
+		return
 	}
 	response := response{ticket{id, "Anything from Zendesk", ""}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
 		log.Print(err)
-		return 500, err.Error()
+		res.WriteHeader(500)
+		return
 	}
-	return 200, string(bytes)
+	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	res.WriteHeader(200)
+	res.Write(bytes)
 }
