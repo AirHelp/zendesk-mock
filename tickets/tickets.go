@@ -12,6 +12,8 @@ import (
 const (
 	min = 1000
 	max = 10000
+	// TicketsFindURI uri path without param
+	TicketsFindURI = "/api/v2/tickets/"
 )
 
 type response struct {
@@ -61,7 +63,7 @@ func New(res http.ResponseWriter, req *http.Request) {
 
 // Find finds ticket
 func Find(res http.ResponseWriter, req *http.Request) {
-	id, err := strconv.Atoi(strings.Replace(req.URL.RequestURI(), "/api/v2/tickets/", "", 1))
+	id, err := strconv.Atoi(strings.Replace(req.URL.RequestURI(), TicketsFindURI, "", 1))
 	if err != nil {
 		log.Print(err)
 		res.WriteHeader(404)

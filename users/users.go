@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+const (
+	// UsersFindPath URi path without param
+	UsersFindPath = "/api/v2/users/"
+)
+
 type response struct {
 	User user `json:"user"`
 }
@@ -19,7 +24,7 @@ type user struct {
 
 // Find finds users
 func Find(res http.ResponseWriter, req *http.Request) {
-	id, err := strconv.Atoi(strings.Replace(req.URL.RequestURI(), "/api/v2/users/", "", 1))
+	id, err := strconv.Atoi(strings.Replace(req.URL.RequestURI(), UsersFindPath, "", 1))
 	if err != nil {
 		log.Print(err)
 		res.WriteHeader(400)

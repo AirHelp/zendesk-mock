@@ -12,8 +12,8 @@ import (
 func main() {
 	m := martini.Classic()
 	m.Post("/api/v2/tickets", tickets.New)
-	m.Get("/api/v2/tickets/:id", tickets.Find)
-	m.Get("/api/v2/users/:id", users.Find)
+	m.Get(tickets.TicketsFindURI+":id", tickets.Find)
+	m.Get(users.UsersFindPath+":id", users.Find)
 	port := ":8080"
 	if len(os.Args) > 1 {
 		port = fmt.Sprintf(":%s", os.Args[1])
