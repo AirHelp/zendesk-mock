@@ -5,15 +5,11 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-
-	"github.com/go-martini/martini"
 	"time"
 	"strings"
 )
 
 const (
-	min = 1000
-	max = 10000
 	// TicketsFindURI uri path without param
 	TicketsFindURI = "/api/v2/tickets/"
 )
