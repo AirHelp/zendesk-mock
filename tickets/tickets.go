@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 	"strings"
+	"time"
 )
 
 const (
@@ -18,10 +18,16 @@ type response struct {
 	Ticket ticket `json:"ticket"`
 }
 
+type customField struct {
+	ID    int    `json:"id"`
+	Value string `json:"value"`
+}
+
 type ticket struct {
-	ID      int    `json:"id"`
-	Subject string `json:"subject"`
-	Comment string `json:"comment"`
+	ID           int           `json:"id"`
+	Subject      string        `json:"subject"`
+	Comment      string        `json:"comment"`
+	CustomFields []customField `json:"custom_fields"`
 }
 
 type reqBody struct {
@@ -68,7 +74,8 @@ func Find(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(404)
 		return
 	}
-	response := response{ticket{id, "Anything from Zendesk", ""}}
+	customs := []customField{customField{23020926, "ch_web"}}
+	response := response{ticket{id, "Anything from Zendesk", "", customs}}
 	bytes, err := json.Marshal(response)
 	if err != nil {
 		log.Print(err)
