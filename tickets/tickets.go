@@ -75,8 +75,8 @@ func Find(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	customs := []customField{customField{23020926, "ch_web"}}
-	response := response{ticket{id, "Anything from Zendesk", "", customs}}
-	bytes, err := json.Marshal(response)
+	builtResponse := response{ticket{id, "Anything from Zendesk", "", customs}}
+	bytes, err := json.Marshal(builtResponse)
 	if err != nil {
 		log.Print(err)
 		res.WriteHeader(500)
