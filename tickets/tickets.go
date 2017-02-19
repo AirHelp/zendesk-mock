@@ -52,9 +52,9 @@ func New(res http.ResponseWriter, req *http.Request) {
 	if input.Ticket.Subject == "" {
 		log.Println("Missing ticket.subject")
 	}
-	timestampId := int(time.Now().Unix())
-	response := response{ticket{ID: timestampId, Subject: input.Ticket.Subject, Comment: input.Ticket.Comment.Body}}
-	bytes, err := json.Marshal(response)
+	timestampID := int(time.Now().Unix())
+	responseBody := response{ticket{ID: timestampID, Subject: input.Ticket.Subject, Comment: input.Ticket.Comment.Body}}
+	bytes, err := json.Marshal(responseBody)
 	if err != nil {
 		log.Print(err)
 		res.WriteHeader(500)
