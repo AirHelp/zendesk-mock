@@ -14,20 +14,22 @@ const (
 	TicketsFindURI = "/api/v2/tickets/"
 )
 
-type response struct {
-	Ticket ticket `json:"ticket"`
+type Response struct {
+	Ticket Ticket `json:"ticket"`
 }
 
-type customField struct {
+// CustomField is used as a part of Ticket struct
+type CustomField struct {
 	ID    int    `json:"id"`
 	Value string `json:"value"`
 }
 
-type ticket struct {
+// Ticket is used for a response
+type Ticket struct {
 	ID           int           `json:"id"`
 	Subject      string        `json:"subject"`
 	Comment      string        `json:"comment"`
-	CustomFields []customField `json:"custom_fields"`
+	CustomFields []CustomField `json:"custom_fields"`
 }
 
 type reqBody struct {
@@ -41,6 +43,7 @@ type reqComment struct {
 	Body string `json:"body"`
 }
 
+// New creates new ticket
 func New(res http.ResponseWriter, req *http.Request) {
 	dec := json.NewDecoder(req.Body)
 	var input reqBody
@@ -53,7 +56,7 @@ func New(res http.ResponseWriter, req *http.Request) {
 		log.Println("Missing ticket.subject")
 	}
 	timestampID := int(time.Now().Unix())
-	responseBody := response{ticket{ID: timestampID, Subject: input.Ticket.Subject, Comment: input.Ticket.Comment.Body}}
+	responseBody := Response{Ticket{ID: timestampID, Subject: input.Ticket.Subject, Comment: input.Ticket.Comment.Body}}
 	bytes, err := json.Marshal(responseBody)
 	if err != nil {
 		log.Print(err)
@@ -74,8 +77,8 @@ func Find(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(404)
 		return
 	}
-	customs := []customField{customField{23020926, "ch_web"}}
-	builtResponse := response{ticket{id, "Anything from Zendesk", "", customs}}
+	customs := []CustomField{CustomField{23020926, "ch_web"}}
+	builtResponse := Response{Ticket{id, "Anything from Zendesk", "", customs}}
 	bytes, err := json.Marshal(builtResponse)
 	if err != nil {
 		log.Print(err)

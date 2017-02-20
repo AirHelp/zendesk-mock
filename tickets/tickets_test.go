@@ -1,7 +1,7 @@
 package tickets_test
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -32,12 +32,16 @@ func TestTicketsNew(t *testing.T) {
 			status, 201)
 	}
 
-	// 	// Check the response body is what we expect.
+	// Check the response body is what we expect.
 	timestampID := int(time.Now().Unix())
-	expected := fmt.Sprintf(`{"ticket":{"id":%v,"subject":"sample subject","comment":"","custom_fields":null}}`, timestampID)
-	if rr.Body.String() != expected {
-		t.Errorf("handler returned unexpected body: got %v want %v",
-			rr.Body.String(), expected)
+	var ticketResponse tickets.Response
+	dec := json.NewDecoder(rr.Body)
+	err = dec.Decode(&ticketResponse)
+	if err != nil {
+		t.Errorf("Unable to unmarshal response: %v", rr.Body.String())
+	}
+	if ticketResponse.Ticket.ID < timestampID {
+		t.Errorf("Wrong ID in response: %v", ticketResponse.Ticket.ID)
 	}
 }
 
