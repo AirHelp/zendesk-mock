@@ -22,7 +22,7 @@ vet:
 
 test: fmt vet
 	@echo 'run the unit tests'
-	@go test -cover -v $(TEST)
+	@go test -cover $(TEST)
 
 dev:
 	go build

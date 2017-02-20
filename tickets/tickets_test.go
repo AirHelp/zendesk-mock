@@ -46,30 +46,46 @@ func TestTicketsNew(t *testing.T) {
 }
 
 func TestTicketsFindGet(t *testing.T) {
-	// Create a request to pass to our handler.
-	req, err := http.NewRequest("GET", tickets.TicketsFindURI+"123", nil)
-	if err != nil {
-		t.Fatal(err)
+	cases := []struct {
+		uri, expected string
+		code          int
+	}{
+		{
+			tickets.TicketsFindURI + "123",
+			`{"ticket":{"id":123,"subject":"Anything from Zendesk","comment":"","custom_fields":[{"id":23020926,"value":"ch_web"}]}}`,
+			200,
+		},
+		{
+			tickets.TicketsFindURI,
+			"",
+			404,
+		},
 	}
+	for _, c := range cases {
+		// Create a request to pass to our handler.
+		req, err := http.NewRequest("GET", c.uri, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(tickets.Find)
+		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+		rr := httptest.NewRecorder()
+		handler := http.HandlerFunc(tickets.Find)
 
-	// Our handlers satisfy http.Handler, so we can call their ServeHTTP method
-	// directly and pass in our Request and ResponseRecorder.
-	handler.ServeHTTP(rr, req)
+		// Our handlers satisfy http.Handler, so we can call their ServeHTTP method
+		// directly and pass in our Request and ResponseRecorder.
+		handler.ServeHTTP(rr, req)
 
-	// Check the status code is what we expect.
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v",
-			status, http.StatusOK)
-	}
+		// Check the status code is what we expect.
+		if rr.Code != c.code {
+			t.Errorf("handler returned wrong status code: got %v want %v",
+				rr.Code, c.code)
+		}
 
-	// Check the response body is what we expect.
-	expected := `{"ticket":{"id":123,"subject":"Anything from Zendesk","comment":"","custom_fields":[{"id":23020926,"value":"ch_web"}]}}`
-	if rr.Body.String() != expected {
-		t.Errorf("handler returned unexpected body: got %v want %v",
-			rr.Body.String(), expected)
+		// Check the response body is what we expect.
+		if rr.Body.String() != c.expected {
+			t.Errorf("handler returned unexpected body: got %v want %v",
+				rr.Body.String(), c.expected)
+		}
 	}
 }
