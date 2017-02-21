@@ -21,3 +21,9 @@ docker run -p 8080:8080 airhelp/zendesk-mock
 ```bash
 make push
 ```
+
+## Execute tests
+
+```
+make test
+```
