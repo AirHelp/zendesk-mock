@@ -77,7 +77,24 @@ func Find(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(404)
 		return
 	}
-	customs := []CustomField{CustomField{23020926, "ch_web"}}
+	customs := []CustomField{
+		CustomField{28367069, "GF4534"},                                                //reference
+		CustomField{28518725, "delayed"},                                               //type
+		CustomField{28367089, "600"},                                                   //comp_per_pass
+		CustomField{28518845, "600.0"},                                                 //comp_per_pass_decimal
+		CustomField{28518825, "600"},                                                   //comp_total
+		CustomField{28367689, "600.0"},                                                 //compt_total_decimal
+		CustomField{28367989, "en"},                                                    //locale
+		CustomField{28368009, "ch_web"},                                                //channel
+		CustomField{28518885, "John Doe"},                                              //pass1
+		CustomField{28518905, "John F. Kennedy International Airport, New York (JFK)"}, //departure
+		CustomField{28368029, "Tegel Airport, Berlin (TXL)"},                           //arrival
+		CustomField{28518945, "LOT - Polish Airlines (LO)"},                            //airline_name_and_code
+		CustomField{28368069, "554"},                                                   //flight_no
+		CustomField{28368089, "2017-03-13"},                                            //date
+		CustomField{28518965, "LO"},                                                    //airline_code
+		CustomField{29960329, ""}}                                                      //linked_ticket
+
 	builtResponse := Response{Ticket{id, "Anything from Zendesk", "", customs}}
 	bytes, err := json.Marshal(builtResponse)
 	if err != nil {

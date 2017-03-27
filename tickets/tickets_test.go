@@ -52,7 +52,7 @@ func TestTicketsFindGet(t *testing.T) {
 	}{
 		{
 			tickets.TicketsFindURI + "123",
-			`{"ticket":{"id":123,"subject":"Anything from Zendesk","comment":"","custom_fields":[{"id":23020926,"value":"ch_web"}]}}`,
+			`{"ticket":{"id":123,"subject":"Anything from Zendesk","comment":"","custom_fields":[{"id":28367069,"value":"GF4534"},{"id":28518725,"value":"delayed"},{"id":28367089,"value":"600"},{"id":28518845,"value":"600.0"},{"id":28518825,"value":"600"},{"id":28367689,"value":"600.0"},{"id":28367989,"value":"en"},{"id":28368009,"value":"ch_web"},{"id":28518885,"value":"John Doe"},{"id":28518905,"value":"John F. Kennedy International Airport, New York (JFK)"},{"id":28368029,"value":"Tegel Airport, Berlin (TXL)"},{"id":28518945,"value":"LOT - Polish Airlines (LO)"},{"id":28368069,"value":"554"},{"id":28368089,"value":"2017-03-13"},{"id":28518965,"value":"LO"},{"id":29960329,"value":""}]}}`,
 			200,
 		},
 		{
