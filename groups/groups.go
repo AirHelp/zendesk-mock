@@ -41,8 +41,7 @@ func Create(res http.ResponseWriter, req *http.Request) {
 }
 
 func Show(res http.ResponseWriter, req *http.Request) {
-	id, err := strconv.Atoi(Id(req))
-	if err != nil {
+	if id, err := strconv.Atoi(Id(req)); err != nil {
 		respond.WithJson(res, 404, nil, err)
 	} else {
 		RespondWithMock(res, id, "Group Name")
@@ -50,14 +49,11 @@ func Show(res http.ResponseWriter, req *http.Request) {
 }
 
 func Update(res http.ResponseWriter, req *http.Request) {
-	id, err := strconv.Atoi(Id(req))
-	if err != nil {
-		respond.WithJson(res, 404, nil, err)
-		return
-	}
 	var input reqBody
 	if err := json.NewDecoder(req.Body).Decode(&input); err != nil {
 		respond.WithJson(res, 400, nil, err)
+	} else if id, err := strconv.Atoi(Id(req)); err != nil {
+		respond.WithJson(res, 404, nil, err)
 	} else {
 		RespondWithMock(res, id, input.Group.Name)
 	}
@@ -68,8 +64,7 @@ func Id(req *http.Request) string {
 }
 
 func RespondWithMock(res http.ResponseWriter, id int, name string) {
-	responseBody := Response{Group{ID: id, Name: name}}
-	bytes, err := json.Marshal(responseBody)
+	bytes, err := json.Marshal(Response{Group{ID: id, Name: name}})
 	if err != nil {
 		respond.WithJson(res, 500, nil, err)
 	} else {
