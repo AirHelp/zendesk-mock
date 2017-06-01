@@ -2,13 +2,15 @@ package groups
 
 import (
 	"encoding/json"
-	"log"
+	"github.com/AirHelp/zendesk-mock/respond"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 )
 
 const (
-	GroupsFindURI = "/api/v2/groups/"
+	ApiUrl = "/api/v2/groups/"
 )
 
 type Response struct {
@@ -30,22 +32,47 @@ type reqGroup struct {
 }
 
 func Create(res http.ResponseWriter, req *http.Request) {
-	dec := json.NewDecoder(req.Body)
 	var input reqBody
-	if err := dec.Decode(&input); err != nil {
-		log.Print(err)
-		res.WriteHeader(400)
+	if err := json.NewDecoder(req.Body).Decode(&input); err != nil {
+		respond.WithJson(res, 400, nil, err)
+	} else {
+		RespondWithMock(res, int(time.Now().Unix()), input.Group.Name)
+	}
+}
+
+func Show(res http.ResponseWriter, req *http.Request) {
+	id, err := strconv.Atoi(Id(req))
+	if err != nil {
+		respond.WithJson(res, 404, nil, err)
+	} else {
+		RespondWithMock(res, id, "Group Name")
+	}
+}
+
+func Update(res http.ResponseWriter, req *http.Request) {
+	id, err := strconv.Atoi(Id(req))
+	if err != nil {
+		respond.WithJson(res, 404, nil, err)
 		return
 	}
-	timestampID := int(time.Now().Unix())
-	responseBody := Response{Group{ID: timestampID, Name: input.Group.Name}}
+	var input reqBody
+	if err := json.NewDecoder(req.Body).Decode(&input); err != nil {
+		respond.WithJson(res, 400, nil, err)
+	} else {
+		RespondWithMock(res, id, input.Group.Name)
+	}
+}
+
+func Id(req *http.Request) string {
+	return strings.TrimPrefix(req.URL.Path, ApiUrl)
+}
+
+func RespondWithMock(res http.ResponseWriter, id int, name string) {
+	responseBody := Response{Group{ID: id, Name: name}}
 	bytes, err := json.Marshal(responseBody)
 	if err != nil {
-		log.Print(err)
-		res.WriteHeader(500)
-		return
+		respond.WithJson(res, 500, nil, err)
+	} else {
+		respond.WithJson(res, 201, bytes, nil)
 	}
-	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	res.WriteHeader(201)
-	res.Write(bytes)
 }

@@ -12,10 +12,15 @@ import (
 
 func main() {
 	m := martini.Classic()
+
 	m.Post("/api/v2/tickets", tickets.New)
-	m.Post("/api/v2/groups", groups.Create)
 	m.Get(tickets.TicketsFindURI+":id", tickets.Find)
 	m.Put(tickets.TicketsFindURI+":id", tickets.Find)
+
+	m.Post("/api/v2/groups", groups.Create)
+	m.Get(groups.ApiUrl+":id", groups.Show)
+	m.Put(groups.ApiUrl+":id", groups.Update)
+
 	m.Get(users.UsersFindPath+":id", users.Find)
 	port := ":8080"
 	if len(os.Args) > 1 {
