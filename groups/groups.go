@@ -13,7 +13,7 @@ const (
 	ApiUrl = "/api/v2/groups/"
 )
 
-type groupEnvelope struct {
+type Envelope struct {
   Group Group `json:"group"`
 }
 
@@ -52,14 +52,14 @@ func RequestId(req *http.Request) (int, error) {
 	return strconv.Atoi(strings.TrimPrefix(req.URL.Path, ApiUrl))
 }
 
-func RequestBody(req *http.Request) (groupEnvelope, error) {
-	var envelope groupEnvelope
+func RequestBody(req *http.Request) (Envelope, error) {
+	var envelope Envelope
 	err := json.NewDecoder(req.Body).Decode(&envelope)
 	return envelope, err
 }
 
 func RespondWithMock(res http.ResponseWriter, code int, id int, name string) {
-	bytes, err := json.Marshal(groupEnvelope{Group{Id: id, Name: name}})
+	bytes, err := json.Marshal(Envelope{Group{Id: id, Name: name}})
 	if err != nil {
 		respond.WithJson(res, 500, nil, err)
 	} else {
