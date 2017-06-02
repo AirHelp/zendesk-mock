@@ -32,35 +32,39 @@ type reqGroup struct {
 }
 
 func Create(res http.ResponseWriter, req *http.Request) {
-	var input reqBody
-	if err := json.NewDecoder(req.Body).Decode(&input); err != nil {
+	if requestBody, err := RequestBody(req); err != nil {
 		respond.WithJson(res, 400, nil, err)
 	} else {
-		RespondWithMock(res, int(time.Now().Unix()), input.Group.Name)
+		RespondWithMock(res, int(time.Now().Unix()), requestBody.Group.Name)
 	}
 }
 
 func Show(res http.ResponseWriter, req *http.Request) {
-	if id, err := strconv.Atoi(Id(req)); err != nil {
+	if requestId, err := RequestId(req); err != nil {
 		respond.WithJson(res, 404, nil, err)
 	} else {
-		RespondWithMock(res, id, "Group Name")
+		RespondWithMock(res, requestId, "Group Name")
 	}
 }
 
 func Update(res http.ResponseWriter, req *http.Request) {
-	var input reqBody
-	if err := json.NewDecoder(req.Body).Decode(&input); err != nil {
+	if requestBody, err := RequestBody(req); err != nil {
 		respond.WithJson(res, 400, nil, err)
-	} else if id, err := strconv.Atoi(Id(req)); err != nil {
+	} else if requestId, err := RequestId(req); err != nil {
 		respond.WithJson(res, 404, nil, err)
 	} else {
-		RespondWithMock(res, id, input.Group.Name)
+		RespondWithMock(res, requestId, requestBody.Group.Name)
 	}
 }
 
-func Id(req *http.Request) string {
-	return strings.TrimPrefix(req.URL.Path, ApiUrl)
+func RequestId(req *http.Request) (int, error) {
+	return strconv.Atoi(strings.TrimPrefix(req.URL.Path, ApiUrl))
+}
+
+func RequestBody(req *http.Request) (reqBody, error) {
+	var requestBody reqBody
+	err := json.NewDecoder(req.Body).Decode(&requestBody)
+	return requestBody, err
 }
 
 func RespondWithMock(res http.ResponseWriter, id int, name string) {
