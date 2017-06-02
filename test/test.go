@@ -27,3 +27,9 @@ func IsExpectedToRespondWithCode(t *testing.T, response *httptest.ResponseRecord
 		t.Errorf("handler returned wrong status code: got %v want %v", status, code)
 	}
 }
+
+func IsExpectedToNotBeBlank(t *testing.T, tested string) {
+	if tested == "" {
+		t.Errorf("Is expected to be present but is blank")
+	}
+}
