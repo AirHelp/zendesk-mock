@@ -13,29 +13,20 @@ const (
 	ApiUrl = "/api/v2/groups/"
 )
 
-type Response struct {
-	Group Group `json:"group"`
+type groupEnvelope struct {
+  Group Group `json:"group"`
 }
 
-// Group is used for a response
 type Group struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-type reqBody struct {
-	Group reqGroup `json:"group"`
-}
-
-type reqGroup struct {
-	Name string `json:"name"`
+  Id   int    `json:"id"`
+  Name string `json:"name"`
 }
 
 func Create(res http.ResponseWriter, req *http.Request) {
 	if requestBody, err := RequestBody(req); err != nil {
 		respond.WithJson(res, 400, nil, err)
 	} else {
-		RespondWithMock(res, int(time.Now().Unix()), requestBody.Group.Name)
+		RespondWithMock(res, 201, int(time.Now().Unix()), requestBody.Group.Name)
 	}
 }
 
@@ -43,7 +34,7 @@ func Show(res http.ResponseWriter, req *http.Request) {
 	if requestId, err := RequestId(req); err != nil {
 		respond.WithJson(res, 404, nil, err)
 	} else {
-		RespondWithMock(res, requestId, "Group Name")
+		RespondWithMock(res, 200, requestId, "Group Name")
 	}
 }
 
@@ -53,7 +44,7 @@ func Update(res http.ResponseWriter, req *http.Request) {
 	} else if requestId, err := RequestId(req); err != nil {
 		respond.WithJson(res, 404, nil, err)
 	} else {
-		RespondWithMock(res, requestId, requestBody.Group.Name)
+		RespondWithMock(res, 200, requestId, requestBody.Group.Name)
 	}
 }
 
@@ -61,17 +52,17 @@ func RequestId(req *http.Request) (int, error) {
 	return strconv.Atoi(strings.TrimPrefix(req.URL.Path, ApiUrl))
 }
 
-func RequestBody(req *http.Request) (reqBody, error) {
-	var requestBody reqBody
-	err := json.NewDecoder(req.Body).Decode(&requestBody)
-	return requestBody, err
+func RequestBody(req *http.Request) (groupEnvelope, error) {
+	var envelope groupEnvelope
+	err := json.NewDecoder(req.Body).Decode(&envelope)
+	return envelope, err
 }
 
-func RespondWithMock(res http.ResponseWriter, id int, name string) {
-	bytes, err := json.Marshal(Response{Group{ID: id, Name: name}})
+func RespondWithMock(res http.ResponseWriter, code int, id int, name string) {
+	bytes, err := json.Marshal(groupEnvelope{Group{Id: id, Name: name}})
 	if err != nil {
 		respond.WithJson(res, 500, nil, err)
 	} else {
-		respond.WithJson(res, 201, bytes, nil)
+		respond.WithJson(res, code, bytes, nil)
 	}
 }
