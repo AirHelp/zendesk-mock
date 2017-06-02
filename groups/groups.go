@@ -14,12 +14,12 @@ const (
 )
 
 type Envelope struct {
-  Group Group `json:"group"`
+	Group Group `json:"group"`
 }
 
 type Group struct {
-  Id   int    `json:"id"`
-  Name string `json:"name"`
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 func Create(res http.ResponseWriter, req *http.Request) {
