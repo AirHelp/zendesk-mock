@@ -33,13 +33,13 @@ func TestGroupsCreate(t *testing.T) {
 
 	// Check the response body is what we expect.
 	timestampID := int(time.Now().Unix())
-	var response groups.Response
+	var response groups.Envelope
 	dec := json.NewDecoder(rr.Body)
 	err = dec.Decode(&response)
 	if err != nil {
 		t.Errorf("Unable to unmarshal response: %v", rr.Body.String())
 	}
-	if response.Group.ID < timestampID {
-		t.Errorf("Wrong ID in response: %v", response.Group.ID)
+	if response.Group.Id < timestampID {
+		t.Errorf("Wrong ID in response: %v", response.Group.Id)
 	}
 }
