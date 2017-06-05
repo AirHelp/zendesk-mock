@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func WithJson(res http.ResponseWriter, code int, body []byte, err error) {
+func Json(res http.ResponseWriter, code int, body []byte, err error) {
 	if err != nil {
 		log.Print(err)
 	}

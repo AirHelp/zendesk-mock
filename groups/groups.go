@@ -24,7 +24,7 @@ type Group struct {
 
 func Create(res http.ResponseWriter, req *http.Request) {
 	if requestBody, err := RequestBody(req); err != nil {
-		respond.WithJson(res, 400, nil, err)
+		respond.Json(res, 400, nil, err)
 	} else {
 		RespondWithMock(res, 201, int(time.Now().Unix()), requestBody.Group.Name)
 	}
@@ -32,7 +32,7 @@ func Create(res http.ResponseWriter, req *http.Request) {
 
 func Show(res http.ResponseWriter, req *http.Request) {
 	if requestId, err := RequestId(req); err != nil {
-		respond.WithJson(res, 404, nil, err)
+		respond.Json(res, 404, nil, err)
 	} else {
 		RespondWithMock(res, 200, requestId, "Group Name")
 	}
@@ -40,9 +40,9 @@ func Show(res http.ResponseWriter, req *http.Request) {
 
 func Update(res http.ResponseWriter, req *http.Request) {
 	if requestBody, err := RequestBody(req); err != nil {
-		respond.WithJson(res, 400, nil, err)
+		respond.Json(res, 400, nil, err)
 	} else if requestId, err := RequestId(req); err != nil {
-		respond.WithJson(res, 404, nil, err)
+		respond.Json(res, 404, nil, err)
 	} else {
 		RespondWithMock(res, 200, requestId, requestBody.Group.Name)
 	}
@@ -61,8 +61,8 @@ func RequestBody(req *http.Request) (Envelope, error) {
 func RespondWithMock(res http.ResponseWriter, code int, id int, name string) {
 	bytes, err := json.Marshal(Envelope{Group{Id: id, Name: name}})
 	if err != nil {
-		respond.WithJson(res, 500, nil, err)
+		respond.Json(res, 500, nil, err)
 	} else {
-		respond.WithJson(res, code, bytes, nil)
+		respond.Json(res, code, bytes, nil)
 	}
 }
