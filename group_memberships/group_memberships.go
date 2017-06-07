@@ -2,11 +2,11 @@ package group_memberships
 
 import (
 	"encoding/json"
+	"github.com/AirHelp/zendesk-mock/mocks"
 	"github.com/AirHelp/zendesk-mock/respond"
+	"github.com/go-martini/martini"
 	"net/http"
 	"strconv"
-	"github.com/AirHelp/zendesk-mock/mocks"
-	"github.com/go-martini/martini"
 )
 
 func Index(res http.ResponseWriter, req *http.Request, params martini.Params) {
@@ -17,7 +17,7 @@ func Index(res http.ResponseWriter, req *http.Request, params martini.Params) {
 	}
 }
 
-func DestroyMany(res http.ResponseWriter, req *http.Request) {
+func DestroyMany(res http.ResponseWriter, req *http.Request, params martini.Params) {
 	if req.URL.Query()["ids"] == nil {
 		respond.Json(res, 400, nil, nil)
 	} else {
@@ -25,7 +25,7 @@ func DestroyMany(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func CreateMany(res http.ResponseWriter, req *http.Request) {
+func CreateMany(res http.ResponseWriter, req *http.Request, params martini.Params) {
 	if req.URL.Query()["ids"] == nil {
 		respond.Json(res, 400, nil, nil)
 	} else {

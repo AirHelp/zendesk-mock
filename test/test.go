@@ -1,25 +1,40 @@
 package test
 
 import (
+	"github.com/go-martini/martini"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 )
 
-type action func(res http.ResponseWriter, req *http.Request)
+type action func(res http.ResponseWriter, req *http.Request, params martini.Params)
 
-func RecordAction(t *testing.T, action string, url string, body string, a action) *httptest.ResponseRecorder {
-	req, err := http.NewRequest(action, url, strings.NewReader(body))
-	if err != nil {
-		t.Fatal(err)
-	}
+func RecordGet(route string, url string, body string, handler action) *httptest.ResponseRecorder {
+	m := martini.Classic()
+	m.Get(route, handler)
+	req, _ := http.NewRequest("GET", url, strings.NewReader(body))
+	res := httptest.NewRecorder()
+	m.ServeHTTP(res, req)
+	return res
+}
 
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(a)
+func RecordPost(route string, url string, body string, handler action) *httptest.ResponseRecorder {
+	m := martini.Classic()
+	m.Post(route, handler)
+	req, _ := http.NewRequest("POST", url, strings.NewReader(body))
+	res := httptest.NewRecorder()
+	m.ServeHTTP(res, req)
+	return res
+}
 
-	handler.ServeHTTP(rr, req)
-	return rr
+func RecordPut(route string, url string, body string, handler action) *httptest.ResponseRecorder {
+	m := martini.Classic()
+	m.Put(route, handler)
+	req, _ := http.NewRequest("PUT", url, strings.NewReader(body))
+	res := httptest.NewRecorder()
+	m.ServeHTTP(res, req)
+	return res
 }
 
 func IsExpectedToRespondWithCode(t *testing.T, response *httptest.ResponseRecorder, code int) {
