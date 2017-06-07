@@ -2,6 +2,7 @@ package groups
 
 import (
 	"encoding/json"
+	"github.com/AirHelp/zendesk-mock/api"
 	"github.com/AirHelp/zendesk-mock/mocks"
 	"github.com/AirHelp/zendesk-mock/respond"
 	"github.com/go-martini/martini"
@@ -35,8 +36,8 @@ func Update(res http.ResponseWriter, req *http.Request, params martini.Params) {
 	}
 }
 
-func RequestBody(req *http.Request) (mocks.GroupEnvelope, error) {
-	var envelope mocks.GroupEnvelope
+func RequestBody(req *http.Request) (api.GroupEnvelope, error) {
+	var envelope api.GroupEnvelope
 	err := json.NewDecoder(req.Body).Decode(&envelope)
 	return envelope, err
 }

@@ -2,8 +2,8 @@ package groups_test
 
 import (
 	"encoding/json"
+	"github.com/AirHelp/zendesk-mock/api"
 	"github.com/AirHelp/zendesk-mock/groups"
-	"github.com/AirHelp/zendesk-mock/mocks"
 	"github.com/AirHelp/zendesk-mock/test"
 	"net/http/httptest"
 	"testing"
@@ -34,8 +34,8 @@ func body() string {
 	return `{"group":{"name":"Name"}}`
 }
 
-func receivedGroup(response *httptest.ResponseRecorder) mocks.Group {
-	var envelope mocks.GroupEnvelope
+func receivedGroup(response *httptest.ResponseRecorder) api.Group {
+	var envelope api.GroupEnvelope
 	dec := json.NewDecoder(response.Body)
 	dec.Decode(&envelope)
 	return envelope.Group

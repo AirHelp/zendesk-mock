@@ -1,70 +1,39 @@
 package mocks
 
 import (
+	"github.com/AirHelp/zendesk-mock/api"
 	"time"
 )
-
-type JobStatusEnvelope struct {
-	JobStatus JobStatus `json:"job_status"`
-}
-
-type JobStatus struct {
-	Id       int    `json:"id"`
-	Url      string `json:"url"`
-	Total    int    `json:"total"`
-	Progress int    `json:"progress"`
-	Status   string `json:"status"`
-}
-
-type GroupMembership struct {
-	Id      int  `json:"id"`
-	Default bool `json:"default"`
-	UserId  int  `json:"user_id"`
-	GroupId int  `json:"group_id"`
-}
-
-type GroupMembershipsEnvelope struct {
-	GroupMemberships []GroupMembership `json:"group_memberships"`
-}
-
-type GroupEnvelope struct {
-	Group Group `json:"group"`
-}
-
-type Group struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
 
 func Id() int {
 	return int(time.Now().Unix())
 }
 
-func JobStatusMock() JobStatusEnvelope {
-	resource := JobStatus{
+func JobStatusMock() api.JobStatusEnvelope {
+	resource := api.JobStatus{
 		Id:       Id(),
 		Url:      "url",
 		Total:    1,
 		Progress: 0,
 		Status:   "queued"}
-	return JobStatusEnvelope{resource}
+	return api.JobStatusEnvelope{resource}
 }
 
-func GroupMembershipsMock(userId int) GroupMembershipsEnvelope {
-	collection := []GroupMembership{
+func GroupMembershipsMock(userId int) api.GroupMembershipsEnvelope {
+	collection := []api.GroupMembership{
 		GroupMembershipMock(userId, 0),
 		GroupMembershipMock(userId, 1)}
-	return GroupMembershipsEnvelope{collection}
+	return api.GroupMembershipsEnvelope{collection}
 }
 
-func GroupMembershipMock(userId int, idOffset int) GroupMembership {
-	return GroupMembership{
+func GroupMembershipMock(userId int, idOffset int) api.GroupMembership {
+	return api.GroupMembership{
 		Id:      Id() + idOffset,
 		Default: false,
 		UserId:  userId,
 		GroupId: Id() + idOffset}
 }
 
-func GroupMock(id int, name string) GroupEnvelope {
-	return GroupEnvelope{Group{Id: id, Name: name}}
+func GroupMock(id int, name string) api.GroupEnvelope {
+	return api.GroupEnvelope{api.Group{Id: id, Name: name}}
 }
