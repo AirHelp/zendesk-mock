@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+  "github.com/AirHelp/zendesk-mock/group_memberships"
 	"github.com/AirHelp/zendesk-mock/groups"
 	"github.com/AirHelp/zendesk-mock/tickets"
 	"github.com/AirHelp/zendesk-mock/users"
@@ -20,6 +21,8 @@ func main() {
 	m.Post("/api/v2/groups", groups.Create)
 	m.Get(groups.ApiUrl+":id", groups.Show)
 	m.Put(groups.ApiUrl+":id", groups.Update)
+
+  m.Get("/api/v2/users/:user_id/group_memberships", group_memberships.Index)
 
 	m.Get(users.UsersFindPath+":id", users.Find)
 	port := ":8080"
