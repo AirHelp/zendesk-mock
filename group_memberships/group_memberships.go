@@ -5,6 +5,8 @@ import (
 	"github.com/AirHelp/zendesk-mock/respond"
 	"net/http"
 	"strconv"
+	"github.com/AirHelp/zendesk-mock/mocks"
+	"github.com/go-martini/martini"
 )
 
 const (
@@ -22,17 +24,16 @@ type GroupMembership struct {
 	GroupId int   `json:"group_id"`
 }
 
-func Index(res http.ResponseWriter, req *http.Request) {
-	if requestUserId, err := requestUserId(req); err != nil {
+func Index(res http.ResponseWriter, req *http.Request, params martini.Params) {
+	if userId, err := strconv.Atoi(params["user_id"]); err != nil {
 		respond.Json(res, 404, nil, err)
 	} else {
-		RespondWithCollectionOfMocks(res, 200, requestUserId)
+		respondWithMockedCollection(res, 200, userId)
 	}
 }
 
-func RespondWithCollectionOfMocks(res http.ResponseWriter, code int, userId int) {
-	bytes, err := json.Marshal(mockedCollection(userId))
-	if err != nil {
+func respondWithMockedCollection(res http.ResponseWriter, code int, userId int) {
+	if bytes, err := json.Marshal(mockedCollection(userId)); err != nil {
 		respond.Json(res, 500, nil, err)
 	} else {
 		respond.Json(res, code, bytes, nil)
@@ -41,12 +42,7 @@ func RespondWithCollectionOfMocks(res http.ResponseWriter, code int, userId int)
 
 func mockedCollection(userId int) CollectionEnvelope {
 	collection := []GroupMembership{
-		GroupMembership{Id: 1, Default: false, UserId: userId, GroupId: 1 },
-		GroupMembership{Id: 1, Default: false, UserId: userId, GroupId: 2 }}
+		GroupMembership{Id: mocks.Id(), Default: false, UserId: userId, GroupId: mocks.Id()},
+		GroupMembership{Id: mocks.Id() + 1, Default: false, UserId: userId, GroupId: mocks.Id() + 1}}
 	return CollectionEnvelope{collection}
-}
-
-func requestUserId(req *http.Request) (int, error) {
-	// return strconv.Atoi(strings.TrimPrefix(req.URL.Path, ApiUrl))
-	return strconv.Atoi("1")
 }

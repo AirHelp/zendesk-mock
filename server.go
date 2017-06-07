@@ -25,6 +25,7 @@ func main() {
   m.Get("/api/v2/users/:user_id/group_memberships", group_memberships.Index)
 
 	m.Get(users.UsersFindPath+":id", users.Find)
+
 	port := ":8080"
 	if len(os.Args) > 1 {
 		port = fmt.Sprintf(":%s", os.Args[1])
