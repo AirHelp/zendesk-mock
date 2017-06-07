@@ -37,6 +37,15 @@ func RecordPut(route string, url string, body string, handler action) *httptest.
 	return res
 }
 
+func RecordDelete(route string, url string, body string, handler action) *httptest.ResponseRecorder {
+	m := martini.Classic()
+	m.Delete(route, handler)
+	req, _ := http.NewRequest("DELETE", url, strings.NewReader(body))
+	res := httptest.NewRecorder()
+	m.ServeHTTP(res, req)
+	return res
+}
+
 func IsExpectedToRespondWithCode(t *testing.T, response *httptest.ResponseRecorder, code int) {
 	if status := response.Code; status != code {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, code)

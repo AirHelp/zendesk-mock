@@ -23,8 +23,8 @@ func main() {
 	m.Put("/api/v2/groups/:id", groups.Update)
 
 	m.Get("/api/v2/users/:user_id/group_memberships", group_memberships.Index)
-	m.Delete("/api/v2/group_memberships/destroy_many.json", group_memberships.DestroyMany)
-	m.Post("/api/v2/group_memberships/create_many.json", group_memberships.CreateMany)
+	m.Delete("/api/v2/group_memberships/destroy_many", group_memberships.DestroyMany)
+	m.Post("/api/v2/group_memberships/create_many", group_memberships.CreateMany)
 
 	m.Get(users.UsersFindPath+":id", users.Find)
 
