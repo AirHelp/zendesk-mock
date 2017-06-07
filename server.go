@@ -14,19 +14,27 @@ import (
 func main() {
 	m := martini.Classic()
 
-	m.Post("/api/v2/tickets", tickets.New)
-	m.Get(tickets.TicketsFindURI+":id", tickets.Find)
-	m.Put(tickets.TicketsFindURI+":id", tickets.Find)
+	m.Group("/api/v2/tickets", func(r martini.Router) {
+		r.Post("", tickets.New)
+		r.Get("/:id", tickets.Find)
+		r.Put("/:id", tickets.Find)
+	})
 
-	m.Post("/api/v2/groups", groups.Create)
-	m.Get("/api/v2/groups/:id", groups.Show)
-	m.Put("/api/v2/groups/:id", groups.Update)
+	m.Group("/api/v2/groups", func(r martini.Router) {
+		r.Post("", groups.Create)
+		r.Get("/:id", groups.Show)
+		r.Put("/:id", groups.Update)
+	})
 
-	m.Get("/api/v2/users/:user_id/group_memberships", group_memberships.Index)
-	m.Delete("/api/v2/group_memberships/destroy_many", group_memberships.DestroyMany)
-	m.Post("/api/v2/group_memberships/create_many", group_memberships.CreateMany)
+	m.Group("/api/v2/group_memberships", func(r martini.Router) {
+		r.Delete("/destroy_many", group_memberships.DestroyMany)
+		r.Post("/create_many", group_memberships.CreateMany)
+	})
 
-	m.Get(users.UsersFindPath+":id", users.Find)
+	m.Group("/api/v2/users", func(r martini.Router) {
+		r.Get("/:id", users.Find)
+		r.Get("/:user_id/group_memberships", group_memberships.Index)
+	})
 
 	port := ":8080"
 	if len(os.Args) > 1 {
