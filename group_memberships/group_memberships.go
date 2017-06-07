@@ -9,40 +9,42 @@ import (
 	"github.com/go-martini/martini"
 )
 
-const (
-	ApiUrl = "/api/v2/groups/"
-)
-
-type CollectionEnvelope struct {
-	GroupMemberships []GroupMembership `json:"group_memberships"`
-}
-
-type GroupMembership struct {
-	Id   int    	`json:"id"`
-	Default bool 	`json:"default"`
-	UserId int    `json:"user_id"`
-	GroupId int   `json:"group_id"`
-}
-
 func Index(res http.ResponseWriter, req *http.Request, params martini.Params) {
 	if userId, err := strconv.Atoi(params["user_id"]); err != nil {
 		respond.Json(res, 404, nil, err)
 	} else {
-		respondWithMockedCollection(res, 200, userId)
+		respondWithCollection(res, 200, userId)
 	}
 }
 
-func respondWithMockedCollection(res http.ResponseWriter, code int, userId int) {
-	if bytes, err := json.Marshal(mockedCollection(userId)); err != nil {
+func DestroyMany(res http.ResponseWriter, req *http.Request) {
+	if req.URL.Query()["ids"] == nil {
+		respond.Json(res, 400, nil, nil)
+	} else {
+		respondWithJobStatus(res, 200)
+	}
+}
+
+func CreateMany(res http.ResponseWriter, req *http.Request) {
+	if req.URL.Query()["ids"] == nil {
+		respond.Json(res, 400, nil, nil)
+	} else {
+		respondWithJobStatus(res, 200)
+	}
+}
+
+func respondWithCollection(res http.ResponseWriter, code int, userId int) {
+	if bytes, err := json.Marshal(mocks.GroupMembershipsMock(userId)); err != nil {
 		respond.Json(res, 500, nil, err)
 	} else {
 		respond.Json(res, code, bytes, nil)
 	}
 }
 
-func mockedCollection(userId int) CollectionEnvelope {
-	collection := []GroupMembership{
-		GroupMembership{Id: mocks.Id(), Default: false, UserId: userId, GroupId: mocks.Id()},
-		GroupMembership{Id: mocks.Id() + 1, Default: false, UserId: userId, GroupId: mocks.Id() + 1}}
-	return CollectionEnvelope{collection}
+func respondWithJobStatus(res http.ResponseWriter, code int) {
+	if bytes, err := json.Marshal(mocks.JobStatusMock()); err != nil {
+		respond.Json(res, 500, nil, err)
+	} else {
+		respond.Json(res, 200, bytes, nil)
+	}
 }
