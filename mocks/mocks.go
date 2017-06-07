@@ -2,7 +2,6 @@ package mocks
 
 import (
 	"time"
-	"github.com/AirHelp/zendesk-mock/job_statuses"
 )
 
 type JobStatusEnvelope struct {
@@ -33,14 +32,14 @@ func Id() int {
 	return int(time.Now().Unix())
 }
 
-func JobStatusMock() job_statuses.ResourceEnvelope {
-	resource := job_statuses.Resource{
+func JobStatusMock() JobStatusEnvelope {
+	resource := JobStatus{
 		Id: Id(),
 		Url: "url",
 		Total: 1,
 		Progress: 0,
 		Status: "queued" }
-	return job_statuses.ResourceEnvelope{resource}
+	return JobStatusEnvelope{resource}
 }
 
 func GroupMembershipsMock(userId int) GroupMembershipsEnvelope {
