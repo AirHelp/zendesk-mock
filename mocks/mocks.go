@@ -9,7 +9,7 @@ func Id() int {
 	return int(time.Now().Unix())
 }
 
-func JobStatusMock() api.JobStatusEnvelope {
+func JobStatus() api.JobStatusEnvelope {
 	resource := api.JobStatus{
 		Id:       Id(),
 		Url:      "url",
@@ -19,14 +19,14 @@ func JobStatusMock() api.JobStatusEnvelope {
 	return api.JobStatusEnvelope{resource}
 }
 
-func GroupMembershipsMock(userId int) api.GroupMembershipsEnvelope {
+func GroupMemberships(userId int) api.GroupMembershipsEnvelope {
 	collection := []api.GroupMembership{
-		GroupMembershipMock(userId, 0),
-		GroupMembershipMock(userId, 1)}
+		GroupMembership(userId, 0),
+		GroupMembership(userId, 1)}
 	return api.GroupMembershipsEnvelope{collection}
 }
 
-func GroupMembershipMock(userId int, idOffset int) api.GroupMembership {
+func GroupMembership(userId int, idOffset int) api.GroupMembership {
 	return api.GroupMembership{
 		Id:      Id() + idOffset,
 		Default: false,
@@ -34,6 +34,6 @@ func GroupMembershipMock(userId int, idOffset int) api.GroupMembership {
 		GroupId: Id() + idOffset}
 }
 
-func GroupMock(id int, name string) api.GroupEnvelope {
+func Group(id int, name string) api.GroupEnvelope {
 	return api.GroupEnvelope{api.Group{Id: id, Name: name}}
 }

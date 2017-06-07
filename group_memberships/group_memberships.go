@@ -34,7 +34,7 @@ func CreateMany(res http.ResponseWriter, req *http.Request, params martini.Param
 }
 
 func respondWithCollection(res http.ResponseWriter, code int, userId int) {
-	if bytes, err := json.Marshal(mocks.GroupMembershipsMock(userId)); err != nil {
+	if bytes, err := json.Marshal(mocks.GroupMemberships(userId)); err != nil {
 		respond.Json(res, 500, nil, err)
 	} else {
 		respond.Json(res, code, bytes, nil)
@@ -42,7 +42,7 @@ func respondWithCollection(res http.ResponseWriter, code int, userId int) {
 }
 
 func respondWithJobStatus(res http.ResponseWriter, code int) {
-	if bytes, err := json.Marshal(mocks.JobStatusMock()); err != nil {
+	if bytes, err := json.Marshal(mocks.JobStatus()); err != nil {
 		respond.Json(res, 500, nil, err)
 	} else {
 		respond.Json(res, 200, bytes, nil)

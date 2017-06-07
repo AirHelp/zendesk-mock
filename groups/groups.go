@@ -43,7 +43,7 @@ func RequestBody(req *http.Request) (api.GroupEnvelope, error) {
 }
 
 func RespondWithMock(res http.ResponseWriter, code int, id int, name string) {
-	bytes, err := json.Marshal(mocks.GroupMock(id, name))
+	bytes, err := json.Marshal(mocks.Group(id, name))
 	if err != nil {
 		respond.Json(res, 500, nil, err)
 	} else {
