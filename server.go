@@ -15,9 +15,9 @@ func main() {
 	m := martini.Classic()
 
 	m.Group("/api/v2/tickets", func(r martini.Router) {
-		r.Post("", tickets.New)
-		r.Get("/:id", tickets.Find)
-		r.Put("/:id", tickets.Find)
+		r.Post("", tickets.Create)
+		r.Get("/:id", tickets.Show)
+		r.Put("/:id", tickets.Update)
 	})
 
 	m.Group("/api/v2/groups", func(r martini.Router) {
