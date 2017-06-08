@@ -1,8 +1,9 @@
 package mocks
 
 import (
-	"github.com/AirHelp/zendesk-mock/api"
 	"time"
+
+	"github.com/AirHelp/zendesk-mock/api"
 )
 
 func Id() int {
@@ -16,14 +17,14 @@ func JobStatus() api.JobStatusEnvelope {
 		Total:    1,
 		Progress: 0,
 		Status:   "queued"}
-	return api.JobStatusEnvelope{resource}
+	return api.JobStatusEnvelope{JobStatus: resource}
 }
 
 func GroupMemberships(userId int) api.GroupMembershipsEnvelope {
 	collection := []api.GroupMembership{
 		GroupMembership(userId, 0),
 		GroupMembership(userId, 1)}
-	return api.GroupMembershipsEnvelope{collection}
+	return api.GroupMembershipsEnvelope{GroupMemberships: collection}
 }
 
 func GroupMembership(userId int, idOffset int) api.GroupMembership {
@@ -35,7 +36,7 @@ func GroupMembership(userId int, idOffset int) api.GroupMembership {
 }
 
 func Group(id int, name string) api.GroupEnvelope {
-	return api.GroupEnvelope{api.Group{Id: id, Name: name}}
+	return api.GroupEnvelope{Group: api.Group{Id: id, Name: name}}
 }
 
 func User(id int, name string) api.UserEnvelope {

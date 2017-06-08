@@ -2,11 +2,12 @@ package group_memberships
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/AirHelp/zendesk-mock/mocks"
 	"github.com/AirHelp/zendesk-mock/respond"
 	"github.com/go-martini/martini"
-	"net/http"
-	"strconv"
 )
 
 func Index(res http.ResponseWriter, req *http.Request, params martini.Params) {
@@ -45,6 +46,6 @@ func respondWithJobStatus(res http.ResponseWriter, code int) {
 	if bytes, err := json.Marshal(mocks.JobStatus()); err != nil {
 		respond.Json(res, 500, nil, err)
 	} else {
-		respond.Json(res, 200, bytes, nil)
+		respond.Json(res, code, bytes, nil)
 	}
 }
