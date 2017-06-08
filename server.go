@@ -32,7 +32,7 @@ func main() {
 	})
 
 	m.Group("/api/v2/users", func(r martini.Router) {
-		r.Get("/:id", users.Find)
+		r.Get("/:id", users.Show)
 		r.Get("/:user_id/group_memberships", group_memberships.Index)
 	})
 
