@@ -1,40 +1,33 @@
 package test
 
 import (
-	"github.com/go-martini/martini"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/go-martini/martini"
+)
+
+const (
+	Get    = "GET"
+	Post   = "POST"
+	Put    = "PUT"
+	Delete = "DELETE"
 )
 
 type action func(res http.ResponseWriter, req *http.Request, params martini.Params)
 
-func RecordGet(route string, url string, body string, handler action) *httptest.ResponseRecorder {
+func RecordMethod(route, url, body, method string, handler action) *httptest.ResponseRecorder {
 	m := martini.Classic()
-	m.Get(route, handler)
-	req, _ := http.NewRequest("GET", url, strings.NewReader(body))
-	return responseRecorder(m, req)
-}
-
-func RecordPost(route string, url string, body string, handler action) *httptest.ResponseRecorder {
-	m := martini.Classic()
-	m.Post(route, handler)
-	req, _ := http.NewRequest("POST", url, strings.NewReader(body))
-	return responseRecorder(m, req)
-}
-
-func RecordPut(route string, url string, body string, handler action) *httptest.ResponseRecorder {
-	m := martini.Classic()
-	m.Put(route, handler)
-	req, _ := http.NewRequest("PUT", url, strings.NewReader(body))
-	return responseRecorder(m, req)
-}
-
-func RecordDelete(route string, url string, body string, handler action) *httptest.ResponseRecorder {
-	m := martini.Classic()
-	m.Delete(route, handler)
-	req, _ := http.NewRequest("DELETE", url, strings.NewReader(body))
+	methods := map[string]func(string, ...martini.Handler) martini.Route{
+		Get:    m.Get,
+		Post:   m.Post,
+		Put:    m.Put,
+		Delete: m.Delete,
+	}
+	methods[method](route, handler)
+	req, _ := http.NewRequest(method, url, strings.NewReader(body))
 	return responseRecorder(m, req)
 }
 
