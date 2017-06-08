@@ -10,21 +10,21 @@ import (
 )
 
 func TestShow(t *testing.T) {
-	var response = test.RecordGet("/api/v2/tickets/:id", "/api/v2/tickets/123", "", tickets.Show)
+	var response = test.RecordMethod("/api/v2/tickets/:id", "/api/v2/tickets/123", "", test.Get, tickets.Show)
 
 	test.IsExpectedToRespondWithCode(t, response, 200)
 	test.IsExpectedToNotBeBlank(t, receivedTicket(response).Subject)
 }
 
 func TestCreate(t *testing.T) {
-	var response = test.RecordPost("/api/v2/tickets", "/api/v2/tickets", body(), tickets.Create)
+	var response = test.RecordMethod("/api/v2/tickets", "/api/v2/tickets", body(), test.Post, tickets.Create)
 
 	test.IsExpectedToRespondWithCode(t, response, 201)
 	test.IsExpectedToNotBeBlank(t, receivedTicket(response).Subject)
 }
 
 func TestUpdate(t *testing.T) {
-	var response = test.RecordPut("/api/v2/tickets/:id", "/api/v2/tickets/1", body(), tickets.Update)
+	var response = test.RecordMethod("/api/v2/tickets/:id", "/api/v2/tickets/1", body(), test.Put, tickets.Update)
 
 	test.IsExpectedToRespondWithCode(t, response, 200)
 	test.IsExpectedToNotBeBlank(t, receivedTicket(response).Subject)
