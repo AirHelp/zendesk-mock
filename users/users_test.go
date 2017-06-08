@@ -7,13 +7,13 @@ import (
 )
 
 func TestUsersShow(t *testing.T) {
-	var response = test.RecordGet("/api/v2/users/:id", "/api/v2/users/123", "", users.Show)
+	var response = test.RecordMethod("/api/v2/users/:id", "/api/v2/users/123", "", "GET", users.Show)
 
 	test.IsExpectedToRespondWithCode(t, response, 200)
 }
 
 func TestUsersShowNotExists(t *testing.T) {
-	var response = test.RecordGet("/api/v2/users/:id", "/api/v2/users/wer", "", users.Show)
+	var response = test.RecordMethod("/api/v2/users/:id", "/api/v2/users/wer", "", "GET", users.Show)
 
 	test.IsExpectedToRespondWithCode(t, response, 404)
 }
