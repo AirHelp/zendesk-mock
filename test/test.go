@@ -5,21 +5,36 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/go-martini/martini"
 )
 
-type action func(res http.ResponseWriter, req *http.Request)
+const (
+	Get    = "GET"
+	Post   = "POST"
+	Put    = "PUT"
+	Delete = "DELETE"
+)
 
-func RecordAction(t *testing.T, action string, url string, body string, a action) *httptest.ResponseRecorder {
-	req, err := http.NewRequest(action, url, strings.NewReader(body))
-	if err != nil {
-		t.Fatal(err)
+type action func(res http.ResponseWriter, req *http.Request, params martini.Params)
+
+func RecordMethod(route, url, body, method string, handler action) *httptest.ResponseRecorder {
+	m := martini.Classic()
+	methods := map[string]func(string, ...martini.Handler) martini.Route{
+		Get:    m.Get,
+		Post:   m.Post,
+		Put:    m.Put,
+		Delete: m.Delete,
 	}
+	methods[method](route, handler)
+	req, _ := http.NewRequest(method, url, strings.NewReader(body))
+	return responseRecorder(m, req)
+}
 
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(a)
-
-	handler.ServeHTTP(rr, req)
-	return rr
+func responseRecorder(m *martini.ClassicMartini, req *http.Request) *httptest.ResponseRecorder {
+	res := httptest.NewRecorder()
+	m.ServeHTTP(res, req)
+	return res
 }
 
 func IsExpectedToRespondWithCode(t *testing.T, response *httptest.ResponseRecorder, code int) {

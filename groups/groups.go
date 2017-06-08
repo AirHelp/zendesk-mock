@@ -2,64 +2,48 @@ package groups
 
 import (
 	"encoding/json"
+	"github.com/AirHelp/zendesk-mock/api"
+	"github.com/AirHelp/zendesk-mock/mocks"
 	"github.com/AirHelp/zendesk-mock/respond"
+	"github.com/go-martini/martini"
 	"net/http"
 	"strconv"
-	"strings"
-	"time"
 )
 
-const (
-	ApiUrl = "/api/v2/groups/"
-)
-
-type Envelope struct {
-	Group Group `json:"group"`
-}
-
-type Group struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-func Create(res http.ResponseWriter, req *http.Request) {
+func Create(res http.ResponseWriter, req *http.Request, params martini.Params) {
 	if requestBody, err := RequestBody(req); err != nil {
 		respond.Json(res, 400, nil, err)
 	} else {
-		RespondWithMock(res, 201, int(time.Now().Unix()), requestBody.Group.Name)
+		RespondWithMock(res, 201, mocks.Id(), requestBody.Group.Name)
 	}
 }
 
-func Show(res http.ResponseWriter, req *http.Request) {
-	if requestId, err := RequestId(req); err != nil {
+func Show(res http.ResponseWriter, req *http.Request, params martini.Params) {
+	if id, err := strconv.Atoi(params["id"]); err != nil {
 		respond.Json(res, 404, nil, err)
 	} else {
-		RespondWithMock(res, 200, requestId, "Group Name")
+		RespondWithMock(res, 200, id, "Group Name")
 	}
 }
 
-func Update(res http.ResponseWriter, req *http.Request) {
+func Update(res http.ResponseWriter, req *http.Request, params martini.Params) {
 	if requestBody, err := RequestBody(req); err != nil {
 		respond.Json(res, 400, nil, err)
-	} else if requestId, err := RequestId(req); err != nil {
+	} else if id, err := strconv.Atoi(params["id"]); err != nil {
 		respond.Json(res, 404, nil, err)
 	} else {
-		RespondWithMock(res, 200, requestId, requestBody.Group.Name)
+		RespondWithMock(res, 200, id, requestBody.Group.Name)
 	}
 }
 
-func RequestId(req *http.Request) (int, error) {
-	return strconv.Atoi(strings.TrimPrefix(req.URL.Path, ApiUrl))
-}
-
-func RequestBody(req *http.Request) (Envelope, error) {
-	var envelope Envelope
+func RequestBody(req *http.Request) (api.GroupEnvelope, error) {
+	var envelope api.GroupEnvelope
 	err := json.NewDecoder(req.Body).Decode(&envelope)
 	return envelope, err
 }
 
 func RespondWithMock(res http.ResponseWriter, code int, id int, name string) {
-	bytes, err := json.Marshal(Envelope{Group{Id: id, Name: name}})
+	bytes, err := json.Marshal(mocks.Group(id, name))
 	if err != nil {
 		respond.Json(res, 500, nil, err)
 	} else {
