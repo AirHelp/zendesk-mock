@@ -38,3 +38,7 @@ func GroupMembership(userId int, idOffset int) api.GroupMembership {
 func Group(id int, name string) api.GroupEnvelope {
 	return api.GroupEnvelope{Group: api.Group{Id: id, Name: name}}
 }
+
+func User(id int, name string) api.UserEnvelope {
+	return api.UserEnvelope{User: api.User{Id: id, Name: name}}
+}
