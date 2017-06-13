@@ -40,5 +40,5 @@ func Group(id int, name string) api.GroupEnvelope {
 }
 
 func User(id int, name string) api.UserEnvelope {
-	return api.UserEnvelope{api.User{Id: id, Name: name}}
+	return api.UserEnvelope{User: api.User{Id: id, Name: name}}
 }
