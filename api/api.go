@@ -32,6 +32,34 @@ type Group struct {
 	Name string `json:"name"`
 }
 
+type TicketEnvelope struct {
+	Ticket Ticket `json:"ticket"`
+}
+
+type Ticket struct {
+	ID           int           `json:"id"`
+	Subject      string        `json:"subject"`
+	CustomFields []CustomField `json:"custom_fields"`
+}
+
+type CustomField struct {
+	ID    int    `json:"id"`
+	Value string `json:"value"`
+}
+
+type CreateTicketEnvelope struct {
+	Ticket CreateTicket `json:"ticket"`
+}
+
+type CreateTicket struct {
+	Subject string  `json:"subject"`
+	Comment Comment `json:"comment"`
+}
+
+type Comment struct {
+	Body string `json:"body"`
+}
+
 type UserEnvelope struct {
 	User User `json:"user"`
 }
