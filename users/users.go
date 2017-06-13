@@ -2,42 +2,25 @@ package users
 
 import (
 	"encoding/json"
-	"log"
+	"github.com/AirHelp/zendesk-mock/mocks"
+	"github.com/AirHelp/zendesk-mock/respond"
+	"github.com/go-martini/martini"
 	"net/http"
 	"strconv"
-	"strings"
 )
 
-const (
-	// UsersFindPath URi path without param
-	UsersFindPath = "/api/v2/users/"
-)
-
-type response struct {
-	User user `json:"user"`
+func Show(res http.ResponseWriter, req *http.Request, params martini.Params) {
+	if id, err := strconv.Atoi(params["id"]); err != nil {
+		respond.Json(res, 404, nil, err)
+	} else {
+		respondWithMock(res, 200, id, "User Name")
+	}
 }
 
-type user struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-// Find finds users
-func Find(res http.ResponseWriter, req *http.Request) {
-	id, err := strconv.Atoi(strings.Replace(req.URL.RequestURI(), UsersFindPath, "", 1))
-	if err != nil {
-		log.Print(err)
-		res.WriteHeader(400)
-		return
+func respondWithMock(res http.ResponseWriter, code int, id int, name string) {
+	if bytes, err := json.Marshal(mocks.User(id, name)); err != nil {
+		respond.Json(res, 500, nil, err)
+	} else {
+		respond.Json(res, code, bytes, nil)
 	}
-	user := response{user{id, "Name from Zendesk"}}
-	bytes, err := json.Marshal(user)
-	if err != nil {
-		log.Print(err)
-		res.WriteHeader(500)
-		return
-	}
-	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	res.WriteHeader(200)
-	res.Write(bytes)
 }

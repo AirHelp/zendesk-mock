@@ -59,3 +59,12 @@ type CreateTicket struct {
 type Comment struct {
 	Body string `json:"body"`
 }
+
+type UserEnvelope struct {
+	User User `json:"user"`
+}
+
+type User struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}

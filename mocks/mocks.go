@@ -56,7 +56,11 @@ func Ticket(id int, subject string) api.TicketEnvelope {
 		api.CustomField{28368069, "554"},                                                   //flight_no
 		api.CustomField{28368089, "2017-03-13"},                                            //date
 		api.CustomField{28518965, "LO"},                                                    //airline_code
-		api.CustomField{29960329, ""}}                                                      //linked_ticket
-
+		api.CustomField{29960329, ""},                                                      //linked_ticket
+	}
 	return api.TicketEnvelope{api.Ticket{id, subject, customs}}
+}
+
+func User(id int, name string) api.UserEnvelope {
+	return api.UserEnvelope{User: api.User{Id: id, Name: name}}
 }
