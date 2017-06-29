@@ -1,0 +1,5 @@
+zendesk-mock
+.idea/
+.git/
+README.md
+Makefile
