@@ -1,13 +1,13 @@
 package mocks
 
 import (
-	"time"
-
 	"github.com/AirHelp/zendesk-mock/api"
+	"math/rand"
+	"time"
 )
 
 func Id() int {
-	return int(time.Now().Unix())
+	return int(time.Now().Unix()) + rand.Intn(10000)
 }
 
 func JobStatus() api.JobStatusEnvelope {
