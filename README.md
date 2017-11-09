@@ -9,7 +9,7 @@ cd $GOPATH/src/github.com/AirHelp/zendesk-mock
 
 ## Build
 ```bash
-make release
+make build
 ```
 
 ## Run locally on docker
@@ -25,5 +25,5 @@ make push
 ## Execute tests
 
 ```
-make test
+make tests
 ```

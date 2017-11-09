@@ -1,4 +1,4 @@
-FROM golang:1.8.3-alpine AS golang-build
+FROM golang:1.9.2-alpine3.6 AS golang-build
 RUN mkdir -p /go/src/github.com/AirHelp/zendesk-mock
 WORKDIR /go/src/github.com/AirHelp/zendesk-mock
 COPY . .
