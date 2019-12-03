@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-test
-    command: go test ./...
+    command: sh -c "CGO_ENABLED=0 go test ./..."
     volumes:
       - ./:/go/src/github.com/AirHelp/zendesk-mock
     depends_on:
